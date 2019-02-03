@@ -4,10 +4,6 @@ from sexting import actions
 
 def welcome_message():
     print ("Welcome to Erika's sexting adventure")
-    print('You are in the ' + state.current_room.title())
-
-    if state.is_alive:
-        print('Congrats! You are alive')
 
     list_actions()
 
@@ -17,7 +13,7 @@ def main():
 
     print('Enter action')
 
-    while state.is_alive and not state.escaped:
+    while state.player.is_trapped and state.player.is_alive:
         command=input('> ')
         commands = command.split(' ')
 

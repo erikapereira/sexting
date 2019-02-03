@@ -1,4 +1,4 @@
-from sexting import state, world_state
+from sexting import state
 
 
 def get_actions():
@@ -6,21 +6,21 @@ def get_actions():
 
 def do_action(action, arguments):
     if action == 'look':
-        print('Looks around room. There is a door')
+        print(f'Looks around {state.player.location.name}. There is a door.')
 
     elif action == 'walk':
         print('walking')
 
     elif action == 'open' and arguments and arguments[0] == 'door':
-        world_state.open_door()
+       state.lounge_door.open()
 
     elif action == 'close' and arguments and arguments[0] == 'door':
-        world_state.close_door()
+        state.lounge_door.close()
 
     elif action == 'enter' and arguments and arguments[0] == 'door':
-        state.complete_game()
+        state.lounge_door.enter()
 
     else:
-        state.player_dead(reason='mumbling')
+        state.player.dead()
 
 
