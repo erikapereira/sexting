@@ -1,26 +1,39 @@
 from sexting import state
 
 
-def get_actions():
-    return ['look','walk']
 
-def do_action(action, arguments):
+
+def do_action(action, words):
     if action == 'look':
-        print(f'Looks around {state.player.location.name}. There is a door.')
+        print(f" Location: {state.player.location.name} ")
+        for item in state.player.location.contains:
+            print(f"Room contains: ",item)
 
-    elif action == 'walk':
-        print('walking')
+    elif action == 'examine' and len(words) == 1:
+        item = state.player.location.find_object(words[0])
+        print(f"You can do these actions: ",item.get_actions())
 
-    elif action == 'open' and arguments and arguments[0] == 'door':
-       state.lounge_door.open()
+    elif action and len(words)== 1:
+        item = state.player.location.find_object(words[0])
+        action_valid = action in item.get_actions()
 
-    elif action == 'close' and arguments and arguments[0] == 'door':
-        state.lounge_door.close()
 
-    elif action == 'enter' and arguments and arguments[0] == 'door':
-        state.lounge_door.enter()
+        method_exists = hasattr(item,action)
+
+        if action_valid and method_exists:
+            getattr(item,action)()
+        else:
+            print("arse")
 
     else:
-        state.player.dead()
+        print("Boobs")
+
+
+
+
+
+# look around the room
+# examine an object
+# doing an action
 
 

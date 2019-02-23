@@ -18,9 +18,20 @@ class Location(object):
     def add_item(self,item):
         self.contains.append(item)
 
+    def find_object(self,item_name):
+        for item in self.contains:
+            if item_name.lower() == str(item).lower():
+                return item
+        return None
+
+
+
+
+
+
 class Door(object):
-    def __init__(self):
-        self.is_closed = True
+    actions = ['open',"close",'enter']
+    is_closed = True
 
     def __str__(self):
         return 'door'
@@ -48,6 +59,13 @@ class Door(object):
 
         else:
             print('the door is not open')
+
+    def get_actions(self):
+        return self.actions
+
+    def bad_action(self,action):
+        return "You can't do this."
+
 
 
 
