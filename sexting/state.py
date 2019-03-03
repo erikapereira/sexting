@@ -12,7 +12,6 @@ class Player(object):
 
 
 
-
 class Location(object):
     def __init__(self,name):
         self.name = name
@@ -21,11 +20,18 @@ class Location(object):
     def add_item(self,item):
         self.contains.append(item)
 
+    def remove_item(self,item):
+        self.contains.remove(item)
+
+    # remove item so when you pick up a key its not there anymore!
+
     def find_object(self,item_name):
         for item in self.contains:
             if item_name.lower() == str(item).lower():
                 return item
         return None
+
+    # need to add/remove item from location/inventory once picked up
 
 
 class Door(object):
@@ -37,18 +43,18 @@ class Door(object):
 
     def open(self):
         if self.is_closed:
-            print('the door opened')
+            print('The door opened')
             self.is_closed = False
 
         else:
-            print('the door is already open')
+            print('The door is already open')
 
     def close(self):
         if self.is_closed:
-            print('the door is already closed')
+            print('The door is already closed')
 
         else:
-            print('you closed the door')
+            print('You closed the door')
             self.is_closed = True
 
     def enter(self):
@@ -57,7 +63,7 @@ class Door(object):
             player.is_trapped = False
 
         else:
-            print('the door is not open')
+            print('The door is not open')
 
     def get_actions(self):
         return self.actions
@@ -74,23 +80,37 @@ class LockedDoor(Door):
 
     def open(self):
         if self.is_locked:
-            print('the door is locked')
+            print('The door is locked')
 
         else:
             super().open()
 
     def unlock(self):
 
-        if self.key in player.inventory:
+        if self.is_locked and self.key in player.inventory:
             self.is_locked = False
             print("You unlocked the door")
+
+        elif not self.is_locked and self.key in player.inventory:
+            print("Door is already unlocked")
 
         else:
             print("You don't have a key")
 
+    def lock(self):
+        if self.is_locked and self.key in player.inventory:
+            print("Door is already locked")
+
+        elif not self.is_locked and self.key in player.inventory:
+            self.is_locked = True
+            self.is_closed = True
+            print("You locked the door")
+
+        else:
+            print("You don't have a key")
 
     def get_actions(self):
-        return super().get_actions() + ['unlock']
+        return super().get_actions() + ['unlock','lock']
 
 
 
@@ -102,14 +122,20 @@ class Inventory(object):
     def __contains__(self, item):
         return item in self.inventory_items
 
+    def get_inventory(self):
+        return self.inventory_items
+
     def add_inventory_item (self, inventory_item):
         self.inventory_items.append(inventory_item)
+
+    def remove_inventory_item (self, inventory_item):
+        self.inventory_items.remove(inventory_item)
 
 
 
 
 class InventoryItem(object):
-    actions = ['get']
+    actions = ['get', 'drop']
 
     def __str__(self):
         return self.name
@@ -118,7 +144,18 @@ class InventoryItem(object):
         self.name = name
 
     def get(self):
-        player.inventory.add_inventory_item(self)
+            player.location.remove_item(self)
+            player.inventory.add_inventory_item(self)
+            print(f"Item added to inventory: {self.name}")
+
+    def drop(self):
+            player.location.add_item(self)
+            player.inventory.remove_inventory_item(self)
+            print(f"You dropped {self.name}")
+
+        # why does GET work but not DROP?!
+        # because removing something from Inventory not currently supported in actions.
+
 
     def get_actions(self):
         return self.actions

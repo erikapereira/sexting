@@ -3,7 +3,7 @@ from sexting import actions
 
 
 def welcome_message():
-    print ("Welcome to Erika's sexting adventure")
+    print ("Welcome to Erika's escape room adventure")
 
 
 
@@ -13,9 +13,12 @@ def main():
     print('Enter action')
 
     while state.player.is_trapped and state.player.is_alive:
-        command=input('> ')
+        command=input('> ').strip()
+        # added strip
         commands = command.split(' ')
 
         actions.do_action(commands[0], commands[1:])
+
+        # need to change to include commad being more than two words eg 'pick up' instead of 'get'
 
 
