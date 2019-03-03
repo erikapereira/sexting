@@ -1,0 +1,8 @@
+
+
+
+
+
+
+    class LockedContainer(object):
+        pass

@@ -55,14 +55,6 @@ class Player(object):
 
 
 
-    # append/remove loication
-    # enter door method.
-    # which door is it and where does it go?
-    # change players location
-
-
-    # player actions
-
 
 
 class Location(object):
@@ -236,6 +228,56 @@ class InventoryItem(object):
         return "You can't do this."
 
 
+class RoomItem(object):
+    pass
+
+    # specific actions from somewhere else
+    # cannot be added to inventory
+    #
+
+
+class Container(object):
+    actions = ['open']
+    is_closed = True
+
+    def __init__(self, name):
+        self.name = name
+        self.contains = []
+
+    def __str__(self):
+        return self.name
+
+    def __contains__(self, item):
+        return item in self.contains
+
+    def get_actions(self):
+        return self.actions
+
+    def add_container_item(self, container_item):
+        self.contains.append(container_item)
+
+    def remove_container_item(self, container_item):
+        self.contains.remove(container_item)
+
+    def open(self):
+        if self.is_closed:
+            self.is_closed = False
+            for item in self.contains:
+                player.location.add_item(item)
+                self.remove_container_item(item)
+            print('You opened the box there is a key inside')
+
+            # need to amend ONLY if the key is actually inside
+            # reveal key - add to room location/remove so you can pick up
+        else:
+            print('The box is already open')
+
+
+    def bad_action(self,action):
+        return "You can't do this."
+
+
+# add locations
 room_one = Location(name='Room 1')
 room_two = Location(name='Room 2')
 
@@ -247,13 +289,17 @@ player = Player(location=room_one)
 
 room_one_key = InventoryItem('key')
 room_two_key = InventoryItem('key')
+room_two_box = Container('box')
 
-
+# room one stuff
 room_one_door = LockedDoor(room_two,room_one_key)
 room_one.add_item(room_one_door)
 room_one.add_item(room_one_key)
 
+# room two stuff
 room_two_door = EndDoor(None,room_two_key)
 room_two.add_item(room_two_door)
-room_two.add_item(room_two_key)
+room_two_box.add_container_item(room_two_key)
+
+room_two.add_item(room_two_box)
 
