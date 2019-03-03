@@ -10,12 +10,68 @@ class Player(object):
         self.is_alive = False
         print('You died of dysentery')
 
+    def set_location(self,new_location):
+        self.location = new_location
+
+    def enter_door(self,door):
+        can_be_entered, reason = door.can_be_entered()
+
+        if can_be_entered:
+            if isinstance(door,EndDoor):
+                self.is_trapped = False
+                print("You escaped the room")
+
+            else:
+                self.set_location(door.destination)
+                self.inventory.clear_inventory()
+                print(f"You are in {self.location.name}.")
+        else:
+            print(reason)
+            # this should say the door is locked?? delete redundant code from door class? Or call a function?
+
+    def look(self):
+        print(f" Location: {player.location.name} ")
+        for item in player.location.contains:
+            print(f"Room contains: ", item)
+
+    def examine_object(self,words):
+        item = player.location.find_object(words[0])
+        if not item:
+            print("Item does not exist")
+            return
+        print(f"You can do these actions: ", item.get_actions())
+
+    def get_inventory(self):
+        print("Inventory:")
+        if len(player.inventory.inventory_items) > 0:
+            for inventory_item in player.inventory.get_inventory():
+                print(inventory_item.name)
+        else:
+            print("Emtpy")
+
+            # drop item in inv
+
+
+
+
+
+    # append/remove loication
+    # enter door method.
+    # which door is it and where does it go?
+    # change players location
+
+
+    # player actions
+
 
 
 class Location(object):
     def __init__(self,name):
         self.name = name
         self.contains = []
+
+    def __contains__(self, item):
+        return item in self.contains
 
     def add_item(self,item):
         self.contains.append(item)
@@ -38,6 +94,9 @@ class Door(object):
     actions = ['open',"close",'enter']
     is_closed = True
 
+    def __init__(self,destination):
+        self.destination = destination
+
     def __str__(self):
         return 'door'
 
@@ -57,13 +116,8 @@ class Door(object):
             print('You closed the door')
             self.is_closed = True
 
-    def enter(self):
-        if not self.is_closed:
-            print('Well done you escaped the room!')
-            player.is_trapped = False
-
-        else:
-            print('The door is not open')
+    def can_be_entered(self):
+        return True, None
 
     def get_actions(self):
         return self.actions
@@ -75,7 +129,8 @@ class Door(object):
 class LockedDoor(Door):
     is_locked = True
 
-    def __init__(self,key):
+    def __init__(self,destination,key):
+        super().__init__(destination)
         self.key = key
 
     def open(self):
@@ -112,7 +167,14 @@ class LockedDoor(Door):
     def get_actions(self):
         return super().get_actions() + ['unlock','lock']
 
+    def can_be_entered(self):
+        if self.is_locked:
+            return False, "The door is locked"
+        else:
+            return True, None
 
+class EndDoor(LockedDoor):
+    pass
 
 
 class Inventory(object):
@@ -131,6 +193,14 @@ class Inventory(object):
     def remove_inventory_item (self, inventory_item):
         self.inventory_items.remove(inventory_item)
 
+    def clear_inventory(self):
+        self.inventory_items = []
+
+    def find_object(self,inventory_item):
+        for item in self.inventory_items:
+            if inventory_item.lower() == str(item).lower():
+                return item
+        return None
 
 
 
@@ -144,18 +214,20 @@ class InventoryItem(object):
         self.name = name
 
     def get(self):
+        if self not in player.inventory:
             player.location.remove_item(self)
             player.inventory.add_inventory_item(self)
             print(f"Item added to inventory: {self.name}")
+        else:
+            print("You already have this")
 
     def drop(self):
-            player.location.add_item(self)
+        if self in player.inventory:
             player.inventory.remove_inventory_item(self)
-            print(f"You dropped {self.name}")
-
-        # why does GET work but not DROP?!
-        # because removing something from Inventory not currently supported in actions.
-
+            player.location.add_item(self)
+            print(f"You dropped the {self.name}")
+        else:
+            print("You cant do this")
 
     def get_actions(self):
         return self.actions
@@ -164,15 +236,24 @@ class InventoryItem(object):
         return "You can't do this."
 
 
-lounge = Location(name='lounge')
-
-player = Player(location=lounge)
-
+room_one = Location(name='Room 1')
+room_two = Location(name='Room 2')
 
 
-lounge_key = InventoryItem('key')
+
+player = Player(location=room_one)
 
 
-lounge_door = LockedDoor(lounge_key)
-lounge.add_item(lounge_door)
-lounge.add_item(lounge_key)
+
+room_one_key = InventoryItem('key')
+room_two_key = InventoryItem('key')
+
+
+room_one_door = LockedDoor(room_two,room_one_key)
+room_one.add_item(room_one_door)
+room_one.add_item(room_one_key)
+
+room_two_door = EndDoor(None,room_two_key)
+room_two.add_item(room_two_door)
+room_two.add_item(room_two_key)
+

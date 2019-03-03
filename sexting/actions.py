@@ -1,37 +1,25 @@
 from sexting import state
 
 
-# glabal ations: look, walk, exit, examine, inventory etc
+
 
 def do_action(action, words):
-    if action == 'look':
-        print(f" Location: {state.player.location.name} ")
-        #room contains
-        for item in state.player.location.contains:
-            print(f"Room contains: ",item)
+
+    if action == "enter" and len(words)== 1:
+        item = state.player.location.find_object(words[0])
+        state.player.enter_door(item)
+
+    elif action == 'look':
+        state.player.look()
 
     elif action == "inventory":
-        print("Inventory:")
-        if len(state.player.inventory.inventory_items) > 0:
-            for inventory_item in state.player.inventory.get_inventory():
-                print(inventory_item.name)
-        else:
-            print("Emtpy")
-
-# drop item in inv
+        state.player.get_inventory()
 
     elif action == 'examine' and len(words) == 1:
-        item = state.player.location.find_object(words[0])
-        if not item:
-            print("Item does not exist")
-            return
-        print(f"You can do these actions: ",item.get_actions())
-
-        # add examine to object class?//global actions?
-
+        state.player.examine_object(words)
 
     elif action and len(words)== 1:
-        item = state.player.location.find_object(words[0])
+        item = state.player.location.find_object(words[0]) or state.player.inventory.find_object(words[0])
         if not item:
             print("Item does not exist")
             return
