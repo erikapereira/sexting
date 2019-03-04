@@ -10,16 +10,20 @@ class Player(object):
         self.is_alive = False
         print('You died of dysentery')
 
-    def set_location(self,new_location):
+    def set_location(self, new_location):
         self.location = new_location
 
-    def enter_door(self,door):
+    def enter_door(self, door):
         can_be_entered, reason = door.can_be_entered()
 
         if can_be_entered:
-            if isinstance(door,EndDoor):
+            if isinstance(door, EndDoor):
                 self.is_trapped = False
                 print("You escaped the room")
+
+            elif isinstance(door, TrapDoor):
+                self.is_alive = False
+                print("You fell to your death")
 
             else:
                 self.set_location(door.destination)
@@ -27,7 +31,6 @@ class Player(object):
                 print(f"You are in {self.location.name}.")
         else:
             print(reason)
-            # this should say the door is locked?? delete redundant code from door class? Or call a function?
 
     def look(self):
         print(f" Location: {player.location.name} ")
@@ -35,7 +38,7 @@ class Player(object):
             print(f"Room contains: ", item)
 
     def examine_object(self,words):
-        item = player.location.find_object(words[0])
+        item = player.location.find_object(words[0]) or player.inventory.find_object(words[0])
         if not item:
             print("Item does not exist")
             return
@@ -51,12 +54,6 @@ class Player(object):
 
             # drop item in inv
 
-
-
-
-
-
-
 class Location(object):
     def __init__(self,name):
         self.name = name
@@ -71,15 +68,11 @@ class Location(object):
     def remove_item(self,item):
         self.contains.remove(item)
 
-    # remove item so when you pick up a key its not there anymore!
-
     def find_object(self,item_name):
         for item in self.contains:
             if item_name.lower() == str(item).lower():
                 return item
         return None
-
-    # need to add/remove item from location/inventory once picked up
 
 
 class Door(object):
@@ -116,6 +109,13 @@ class Door(object):
 
     def bad_action(self,action):
         return "You can't do this."
+
+class TrapDoor(Door):
+    def __str__(self):
+        return 'trapdoor'
+
+    def enter(self):
+        player.enter_door()
 
 
 class LockedDoor(Door):
@@ -266,12 +266,8 @@ class Container(object):
                 player.location.add_item(item)
                 self.remove_container_item(item)
             print('You opened the box there is a key inside')
-
-            # need to amend ONLY if the key is actually inside
-            # reveal key - add to room location/remove so you can pick up
         else:
             print('The box is already open')
-
 
     def bad_action(self,action):
         return "You can't do this."
@@ -298,8 +294,11 @@ room_one.add_item(room_one_key)
 
 # room two stuff
 room_two_door = EndDoor(None,room_two_key)
+room_two_trapdoor = TrapDoor(None)
 room_two.add_item(room_two_door)
+room_two.add_item(room_two_trapdoor)
 room_two_box.add_container_item(room_two_key)
 
 room_two.add_item(room_two_box)
+
 
