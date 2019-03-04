@@ -1,6 +1,6 @@
-from sexting.player import Player
-from sexting.world.room import Location,TrapDoor,EndDoor,LockedDoor
-from sexting.world.items import InventoryItem,Container
+from escape.player import Player
+from escape.world.room import Location, TrapDoor, EndDoor, LockedDoor
+from escape.world.items import InventoryItem, Container
 
 
 # add locations

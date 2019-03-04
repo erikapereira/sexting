@@ -37,7 +37,7 @@ class Door(object):
         else:
             print("The door is already open")
 
-    def close(self,player):
+    def close(self, player):
         if self.is_closed:
             print("The door is already closed")
 
@@ -59,7 +59,7 @@ class TrapDoor(Door):
     def __str__(self):
         return "trapdoor"
 
-    def enter(self,player):
+    def enter(self, player):
         player.enter_door()
 
 

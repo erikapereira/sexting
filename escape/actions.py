@@ -1,4 +1,3 @@
-
 def do_action(player, action, words):
 
     if action == "enter" and len(words) == 1:
@@ -15,9 +14,9 @@ def do_action(player, action, words):
         player.examine_object(words)
 
     elif action and len(words) == 1:
-        item = player.location.find_object(
+        item = player.location.find_object(words[0]) or player.inventory.find_object(
             words[0]
-        ) or player.inventory.find_object(words[0])
+        )
         if not item:
             print("Item does not exist")
             return

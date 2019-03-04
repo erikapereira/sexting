@@ -1,4 +1,3 @@
-
 class Player(object):
     def __init__(self, location):
         self.is_alive = True
@@ -17,7 +16,7 @@ class Player(object):
         can_be_entered, reason = door.can_be_entered()
 
         if can_be_entered:
-            from sexting.world.room import TrapDoor, EndDoor
+            from escape.world.room import TrapDoor, EndDoor
 
             if isinstance(door, EndDoor):
                 self.is_trapped = False
@@ -83,5 +82,3 @@ class Inventory(object):
             if inventory_item.lower() == str(item).lower():
                 return item
         return None
-
-

@@ -1,5 +1,5 @@
-from sexting import actions
-from sexting.levels import player
+from escape import actions
+from escape.levels import player
 
 
 def welcome_message():

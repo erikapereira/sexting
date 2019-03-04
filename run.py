@@ -1,3 +1,3 @@
-from sexting.main import main
+from escape.main import main
 
 main()
