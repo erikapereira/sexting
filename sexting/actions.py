@@ -1,25 +1,23 @@
-from sexting import state
 
-
-def do_action(action, words):
+def do_action(player, action, words):
 
     if action == "enter" and len(words) == 1:
-        item = state.player.location.find_object(words[0])
-        state.player.enter_door(item)
+        item = player.location.find_object(words[0])
+        player.enter_door(item)
 
     elif action == "look":
-        state.player.look()
+        player.look()
 
     elif action == "inventory":
-        state.player.get_inventory()
+        player.get_inventory()
 
     elif action == "examine" and len(words) == 1:
-        state.player.examine_object(words)
+        player.examine_object(words)
 
     elif action and len(words) == 1:
-        item = state.player.location.find_object(
+        item = player.location.find_object(
             words[0]
-        ) or state.player.inventory.find_object(words[0])
+        ) or player.inventory.find_object(words[0])
         if not item:
             print("Item does not exist")
             return
@@ -28,7 +26,7 @@ def do_action(action, words):
         method_exists = hasattr(item, action)
 
         if action_valid and method_exists:
-            getattr(item, action)()
+            getattr(item, action)(player)
         else:
             print(item.bad_action(action))
 

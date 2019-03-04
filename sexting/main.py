@@ -1,5 +1,5 @@
-from sexting import state
 from sexting import actions
+from sexting.levels import player
 
 
 def welcome_message():
@@ -11,12 +11,12 @@ def main():
 
     print("Enter action")
 
-    while state.player.is_trapped and state.player.is_alive:
+    while player.is_trapped and player.is_alive:
         command = input("> ").strip()
         # added strip
         commands = command.split(" ")
 
-        actions.do_action(commands[0], commands[1:])
+        actions.do_action(player, commands[0], commands[1:])
 
         # need to change to include commad being more than two words eg 'pick up' instead of 'get'
 
