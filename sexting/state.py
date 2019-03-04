@@ -1,6 +1,5 @@
-
 class Player(object):
-    def __init__(self,location):
+    def __init__(self, location):
         self.is_alive = True
         self.is_trapped = True
         self.location = location
@@ -8,7 +7,7 @@ class Player(object):
 
     def dead(self):
         self.is_alive = False
-        print('You died of dysentery')
+        print("You died of dysentery")
 
     def set_location(self, new_location):
         self.location = new_location
@@ -37,8 +36,10 @@ class Player(object):
         for item in player.location.contains:
             print(f"Room contains: ", item)
 
-    def examine_object(self,words):
-        item = player.location.find_object(words[0]) or player.inventory.find_object(words[0])
+    def examine_object(self, words):
+        item = player.location.find_object(words[0]) or player.inventory.find_object(
+            words[0]
+        )
         if not item:
             print("Item does not exist")
             return
@@ -54,21 +55,22 @@ class Player(object):
 
             # drop item in inv
 
+
 class Location(object):
-    def __init__(self,name):
+    def __init__(self, name):
         self.name = name
         self.contains = []
 
     def __contains__(self, item):
         return item in self.contains
 
-    def add_item(self,item):
+    def add_item(self, item):
         self.contains.append(item)
 
-    def remove_item(self,item):
+    def remove_item(self, item):
         self.contains.remove(item)
 
-    def find_object(self,item_name):
+    def find_object(self, item_name):
         for item in self.contains:
             if item_name.lower() == str(item).lower():
                 return item
@@ -76,29 +78,29 @@ class Location(object):
 
 
 class Door(object):
-    actions = ['open',"close",'enter']
+    actions = ["open", "close", "enter"]
     is_closed = True
 
-    def __init__(self,destination):
+    def __init__(self, destination):
         self.destination = destination
 
     def __str__(self):
-        return 'door'
+        return "door"
 
     def open(self):
         if self.is_closed:
-            print('The door opened')
+            print("The door opened")
             self.is_closed = False
 
         else:
-            print('The door is already open')
+            print("The door is already open")
 
     def close(self):
         if self.is_closed:
-            print('The door is already closed')
+            print("The door is already closed")
 
         else:
-            print('You closed the door')
+            print("You closed the door")
             self.is_closed = True
 
     def can_be_entered(self):
@@ -107,12 +109,13 @@ class Door(object):
     def get_actions(self):
         return self.actions
 
-    def bad_action(self,action):
+    def bad_action(self, action):
         return "You can't do this."
+
 
 class TrapDoor(Door):
     def __str__(self):
-        return 'trapdoor'
+        return "trapdoor"
 
     def enter(self):
         player.enter_door()
@@ -121,13 +124,13 @@ class TrapDoor(Door):
 class LockedDoor(Door):
     is_locked = True
 
-    def __init__(self,destination,key):
+    def __init__(self, destination, key):
         super().__init__(destination)
         self.key = key
 
     def open(self):
         if self.is_locked:
-            print('The door is locked')
+            print("The door is locked")
 
         else:
             super().open()
@@ -157,13 +160,14 @@ class LockedDoor(Door):
             print("You don't have a key")
 
     def get_actions(self):
-        return super().get_actions() + ['unlock','lock']
+        return super().get_actions() + ["unlock", "lock"]
 
     def can_be_entered(self):
         if self.is_locked:
             return False, "The door is locked"
         else:
             return True, None
+
 
 class EndDoor(LockedDoor):
     pass
@@ -179,30 +183,29 @@ class Inventory(object):
     def get_inventory(self):
         return self.inventory_items
 
-    def add_inventory_item (self, inventory_item):
+    def add_inventory_item(self, inventory_item):
         self.inventory_items.append(inventory_item)
 
-    def remove_inventory_item (self, inventory_item):
+    def remove_inventory_item(self, inventory_item):
         self.inventory_items.remove(inventory_item)
 
     def clear_inventory(self):
         self.inventory_items = []
 
-    def find_object(self,inventory_item):
+    def find_object(self, inventory_item):
         for item in self.inventory_items:
             if inventory_item.lower() == str(item).lower():
                 return item
         return None
 
 
-
 class InventoryItem(object):
-    actions = ['get', 'drop']
+    actions = ["get", "drop"]
 
     def __str__(self):
         return self.name
 
-    def __init__(self,name):
+    def __init__(self, name):
         self.name = name
 
     def get(self):
@@ -224,7 +227,7 @@ class InventoryItem(object):
     def get_actions(self):
         return self.actions
 
-    def bad_action(self,action):
+    def bad_action(self, action):
         return "You can't do this."
 
 
@@ -237,7 +240,7 @@ class RoomItem(object):
 
 
 class Container(object):
-    actions = ['open']
+    actions = ["open"]
     is_closed = True
 
     def __init__(self, name):
@@ -265,40 +268,36 @@ class Container(object):
             for item in self.contains:
                 player.location.add_item(item)
                 self.remove_container_item(item)
-            print('You opened the box there is a key inside')
+            print("You opened the box there is a key inside")
         else:
-            print('The box is already open')
+            print("The box is already open")
 
-    def bad_action(self,action):
+    def bad_action(self, action):
         return "You can't do this."
 
 
 # add locations
-room_one = Location(name='Room 1')
-room_two = Location(name='Room 2')
-
+room_one = Location(name="Room 1")
+room_two = Location(name="Room 2")
 
 
 player = Player(location=room_one)
 
 
-
-room_one_key = InventoryItem('key')
-room_two_key = InventoryItem('key')
-room_two_box = Container('box')
+room_one_key = InventoryItem("key")
+room_two_key = InventoryItem("key")
+room_two_box = Container("box")
 
 # room one stuff
-room_one_door = LockedDoor(room_two,room_one_key)
+room_one_door = LockedDoor(room_two, room_one_key)
 room_one.add_item(room_one_door)
 room_one.add_item(room_one_key)
 
 # room two stuff
-room_two_door = EndDoor(None,room_two_key)
+room_two_door = EndDoor(None, room_two_key)
 room_two_trapdoor = TrapDoor(None)
 room_two.add_item(room_two_door)
 room_two.add_item(room_two_trapdoor)
 room_two_box.add_container_item(room_two_key)
 
 room_two.add_item(room_two_box)
-
-
