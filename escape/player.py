@@ -38,6 +38,7 @@ class Player(object):
         for item in self.location.contains:
             print(f"Room contains: ", item)
 
+
     def examine_object(self, words):
         item = self.location.find_object(words[0]) or self.inventory.find_object(
             words[0]
@@ -55,7 +56,11 @@ class Player(object):
         else:
             print("Emtpy")
 
-            # drop item in inv
+    def help(self):
+        print(f"'Help! Help!' You cry. But no one comes.")
+        print(f"Try typing 'look' to see what's in the room, or 'examine' followed by an object.")
+
+        # drop item in inv
 
 
 class Inventory(object):
@@ -82,3 +87,14 @@ class Inventory(object):
             if inventory_item.lower() == str(item).lower():
                 return item
         return None
+
+
+ # class PlayerActions(object):
+ #        def __init__(self):
+ #            self.player_actions = []
+ #
+ #        def add_player_action(self):
+ #            self.player_actions.append( )
+ #
+ #        def get_player_actions(self):
+ #            return self.add_player_action()

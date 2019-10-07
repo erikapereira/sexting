@@ -19,6 +19,8 @@ class Location(object):
         return None
 
 
+
+
 class Door(object):
     actions = ["open", "close", "enter"]
     is_closed = True
@@ -113,3 +115,5 @@ class LockedDoor(Door):
 
 class EndDoor(LockedDoor):
     pass
+
+

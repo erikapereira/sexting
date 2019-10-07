@@ -8,7 +8,6 @@ def welcome_message():
 
 def main():
     welcome_message()
-
     print("Enter action")
 
     while player.is_trapped and player.is_alive:
