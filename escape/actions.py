@@ -13,16 +13,13 @@ def do_action(player, action, words):
     elif action == "inventory":
         player.get_inventory()
 
-    elif action == "help":
-        player.help()
-
     elif action == "examine" and len(words) == 1:
         player.examine_object(words)
 
     elif action and len(words) == 1:
         item = player.location.find_object(words[0]) or player.inventory.find_object(
-            words[0]
- )
+            words[0])
+
         if not item:
             print("Item does not exist")
             return
@@ -35,16 +32,11 @@ def do_action(player, action, words):
         else:
             print(item.bad_action(action))
 
+    elif action == 'exit':
+        player.exit()
+
     else:
         print("Boobs")
-
-
-
-
-
-
-
-
 
 
 # look around the room

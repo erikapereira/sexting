@@ -6,6 +6,9 @@ class Location(object):
     def __contains__(self, item):
         return item in self.contains
 
+    def room_contains(self, item):
+        return item in self.contains
+
     def add_item(self, item):
         self.contains.append(item)
 
@@ -115,5 +118,5 @@ class LockedDoor(Door):
 
 class EndDoor(LockedDoor):
     pass
-
+# EndDoor completes the game - the game ending is handled in player state
 

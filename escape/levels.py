@@ -3,8 +3,9 @@ from escape.world.room import Location, TrapDoor, EndDoor, LockedDoor
 from escape.world.items import InventoryItem, Container
 
 
-# add locations
-room_one = Location(name="Room 1")
+# add locations this is going to get confusing if they are all numbered whoops
+# TODO: give these better names!
+room_one = Location(name="Front porch")
 room_two = Location(name="Room 2")
 
 player = Player(location=room_one)

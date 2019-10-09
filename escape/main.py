@@ -3,12 +3,12 @@ from escape.levels import player
 
 
 def welcome_message():
-    print("Welcome to Erika's escape room adventure")
+    print("You've received an invitation to Baron Von Cheesesticks kinky dungeon party. You've arrived at the house on the address, but where's the party?")
 
 
 def main():
     welcome_message()
-    print("Enter action")
+    print("Try typing 'look' to begin")
 
     while player.is_trapped and player.is_alive:
         command = input("> ").strip()
@@ -17,7 +17,6 @@ def main():
 
         actions.do_action(player, commands[0], commands[1:])
 
-        # need to change to include commad being more than two words eg 'pick up' instead of 'get'
 
         # black . in terminal to format code!
         # pip install black - installs on current project

@@ -9,6 +9,10 @@ class Player(object):
         self.is_alive = False
         print("You died of dysentery")
 
+    def exit(self):
+        self.is_alive = False
+        print("No boobs for you")
+
     def set_location(self, new_location):
         self.location = new_location
 
@@ -34,9 +38,9 @@ class Player(object):
             print(reason)
 
     def look(self):
-        print(f" Location: {self.location.name} ")
-        for item in self.location.contains:
-            print(f"Room contains: ", item)
+        print(f" Location: {self.location.name} ") # bring back the room narritive here?
+        item_names = ', '.join([str(item) for item in self.location.contains])  # Python comprehension
+        print(f" You can see the following things in the room: {item_names}")
 
 
     def examine_object(self, words):
@@ -89,7 +93,8 @@ class Inventory(object):
         return None
 
 
- # class PlayerActions(object):
+ # In game help - get a list of the avaliable player actions depending on what is in the room.
+# class PlayerActions(object):
  #        def __init__(self):
  #            self.player_actions = []
  #

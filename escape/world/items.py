@@ -33,10 +33,9 @@ class InventoryItem(object):
 class RoomItem(object):
     pass
 
-    # specific actions from somewhere else
-    # cannot be added to inventory
+    # Items you cant put in your inventory such as room fixtures you can interact with - what's behind the painting?
+    # does the container below fit that role already?
     #
-
 
 class Container(object):
     actions = ["open"]
